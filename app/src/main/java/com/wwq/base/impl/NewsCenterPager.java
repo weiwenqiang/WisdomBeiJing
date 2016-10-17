@@ -91,7 +91,7 @@ public class NewsCenterPager extends BasePager {
 
         // 准备4个菜单详情页
         mPagers = new ArrayList<BaseMenuDetailPager>();
-        mPagers.add(new NewsMenuDetailPager(mActivity));
+        mPagers.add(new NewsMenuDetailPager(mActivity, mNewsData.data.get(0).children));
         mPagers.add(new TopicMenuDetailPager(mActivity));
         mPagers.add(new PhotoMenuDetailPager(mActivity));
         mPagers.add(new InteractMenuDetailPager(mActivity));
@@ -107,5 +107,7 @@ public class NewsCenterPager extends BasePager {
         //设置当前页的标题
         NewsData.NewsMenuData newsMenuData = mNewsData.data.get(position);
         tvTitle.setText(newsMenuData.title);
+
+        pager.initData();//初始化当前也数据
     }
 }
