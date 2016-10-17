@@ -7,6 +7,8 @@ android {
     aaptOptions.cruncherEnabled = false
     aaptOptions.useNewCruncher = false
 
+    useLibrary 'org.apache.http.legacy'
+
     defaultConfig {
         applicationId "com.wwq.wisdombeijing"
         minSdkVersion 14
@@ -29,4 +31,5 @@ dependencies {
     compile 'com.android.support:design:24.1.1'
     compile project(':SlidingMenuLibrary')
     compile project(':XUtilsLibrary')
+    compile files('libs/gson-2.7.jar')
 }

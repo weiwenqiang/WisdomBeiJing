@@ -45,4 +45,18 @@ public class MainActivity extends SlidingFragmentActivity {
 
         // Fragment leftMenuFragment = fm.findFragmentByTag(FRAGMENT_LEFT_MENU);
     }
+
+    // 获取侧边栏fragment
+    public LeftMenuFragment getLeftMenuFragment(){
+        android.support.v4.app.FragmentManager fm = getSupportFragmentManager();
+        LeftMenuFragment leftMenuFragment = (LeftMenuFragment) fm.findFragmentByTag(FRAGMENT_LEFT_MENU);
+        return leftMenuFragment;
+    }
+
+    // 获取主页面fragment
+    public ContentFragment getContentFragment() {
+        android.support.v4.app.FragmentManager fm = getSupportFragmentManager();
+        ContentFragment fragment = (ContentFragment) fm.findFragmentByTag(FRAGMENT_CONTENT);
+        return fragment;
+    }
 }
