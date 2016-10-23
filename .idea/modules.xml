@@ -6,6 +6,7 @@
       <module fileurl="file://$PROJECT_DIR$/WisdomBeiJing.iml" filepath="$PROJECT_DIR$/WisdomBeiJing.iml" />
       <module fileurl="file://$PROJECT_DIR$/XUtilsLibrary/XUtilsLibrary.iml" filepath="$PROJECT_DIR$/XUtilsLibrary/XUtilsLibrary.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
+      <module fileurl="file://$PROJECT_DIR$/viewPagerIndicatorLibrary/viewPagerIndicatorLibrary.iml" filepath="$PROJECT_DIR$/viewPagerIndicatorLibrary/viewPagerIndicatorLibrary.iml" />
     </modules>
   </component>
 </project>

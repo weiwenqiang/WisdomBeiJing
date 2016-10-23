@@ -13,6 +13,7 @@
             <option value="$PROJECT_DIR$/SlidingMenuLibrary" />
             <option value="$PROJECT_DIR$/XUtilsLibrary" />
             <option value="$PROJECT_DIR$/app" />
+            <option value="$PROJECT_DIR$/viewPagerIndicatorLibrary" />
           </set>
         </option>
       </GradleProjectSettings>

@@ -32,4 +32,5 @@ dependencies {
     compile project(':SlidingMenuLibrary')
     compile project(':XUtilsLibrary')
     compile files('libs/gson-2.7.jar')
+    compile project(':viewPagerIndicatorLibrary')
 }

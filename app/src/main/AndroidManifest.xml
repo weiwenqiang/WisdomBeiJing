@@ -23,7 +23,10 @@
             </intent-filter>
         </activity>
         <activity android:name="com.wwq.activity.GuideActivity" />
-        <activity android:name="com.wwq.wisdombeijing.MainActivity" />
+        <activity
+            android:name="com.wwq.wisdombeijing.MainActivity"
+            android:theme="@style/Theme.PageIndicatorDefaults" />
+        <activity android:name="com.wwq.activity.NewsDetailActivity"/>
     </application>
 
 </manifest>
