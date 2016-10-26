@@ -16,6 +16,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 
+import com.wwq.utils.DensityUtils;
 import com.wwq.utils.SPUtils;
 import com.wwq.wisdombeijing.MainActivity;
 import com.wwq.wisdombeijing.R;
@@ -71,7 +72,8 @@ public class GuideActivity extends Activity {
         //初始化引导页圆点
         for (int i = 0; i < mImageIds.length; i++) {
             View point = new ImageView(this);
-            LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(20, 20);
+            int px = DensityUtils.dp2px(this, 10);//屏幕适配
+            LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(px, px);
             if (i > 0) {
                 params.leftMargin = 20;//圆点间隔
             }

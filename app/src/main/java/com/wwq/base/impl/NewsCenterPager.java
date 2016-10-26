@@ -2,6 +2,8 @@ package com.wwq.base.impl;
 
 import android.app.Activity;
 import android.graphics.Color;
+import android.os.Handler;
+import android.text.TextUtils;
 import android.view.Gravity;
 import android.view.View;
 import android.widget.TextView;
@@ -22,6 +24,7 @@ import com.wwq.base.menudetail.TopicMenuDetailPager;
 import com.wwq.domain.NewsData;
 import com.wwq.fragment.LeftMenuFragment;
 import com.wwq.global.GlobalContants;
+import com.wwq.utils.CacheUtils;
 import com.wwq.wisdombeijing.MainActivity;
 
 import java.util.ArrayList;
@@ -34,6 +37,7 @@ public class NewsCenterPager extends BasePager {
     private ArrayList<BaseMenuDetailPager> mPagers;// 4个菜单详情页的集合
     private NewsData mNewsData;
 
+
     public NewsCenterPager(Activity activity) {
         super(activity);
     }
@@ -45,7 +49,11 @@ public class NewsCenterPager extends BasePager {
         tvTitle.setText("新闻");
         setSlidingMenuEnable(true);// 打开侧边栏
 
-        getDataFromServer();
+        String cache = CacheUtils.getCache(mActivity, GlobalContants.CATEGORIES_URL);
+        if (!TextUtils.isEmpty(cache)) {
+            parseData(cache);
+        }
+        getDataFromServer();//不管有没有缓存，都要获取最新数据
     }
 
     /**
@@ -65,6 +73,8 @@ public class NewsCenterPager extends BasePager {
                         System.out.println("返回结果:" + result);
 
                         parseData(result);
+
+                        CacheUtils.setCache(mActivity, GlobalContants.CATEGORIES_URL, result);
                     }
 
                     // 访问失败
@@ -93,7 +103,7 @@ public class NewsCenterPager extends BasePager {
         mPagers = new ArrayList<BaseMenuDetailPager>();
         mPagers.add(new NewsMenuDetailPager(mActivity, mNewsData.data.get(0).children));
         mPagers.add(new TopicMenuDetailPager(mActivity));
-        mPagers.add(new PhotoMenuDetailPager(mActivity));
+        mPagers.add(new PhotoMenuDetailPager(mActivity, btnPhoto));
         mPagers.add(new InteractMenuDetailPager(mActivity));
 
         setCurrentMenuDetailPager(0);//设置默认详情页
@@ -109,5 +119,11 @@ public class NewsCenterPager extends BasePager {
         tvTitle.setText(newsMenuData.title);
 
         pager.initData();//初始化当前也数据
+
+        if(pager instanceof PhotoMenuDetailPager){
+            btnPhoto.setVisibility(View.VISIBLE);
+        }else{
+            btnPhoto.setVisibility(View.GONE);
+        }
     }
 }

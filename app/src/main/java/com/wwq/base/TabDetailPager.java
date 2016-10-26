@@ -3,10 +3,13 @@ package com.wwq.base;
 import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Color;
+import android.os.Handler;
+import android.os.Message;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.text.TextUtils;
 import android.view.Gravity;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
@@ -30,7 +33,9 @@ import com.wwq.activity.NewsDetailActivity;
 import com.wwq.domain.NewsData;
 import com.wwq.domain.TabData;
 import com.wwq.global.GlobalContants;
+import com.wwq.utils.CacheUtils;
 import com.wwq.utils.SPUtils;
+import com.wwq.utils.bitmap.MyBitmapUtils;
 import com.wwq.view.RefreshListView;
 import com.wwq.wisdombeijing.R;
 
@@ -61,6 +66,8 @@ public class TabDetailPager extends BaseMenuDetailPager implements ViewPager.OnP
     private ArrayList<TabData.TabNewsData> newsDatas;
     private String mMoreUrl;
     private NewsAdapter newsAdapter;
+
+    private Handler mHandler;
 
     public TabDetailPager(Activity mActivity, NewsData.NewsTabData data) {
         super(mActivity);
@@ -126,6 +133,10 @@ public class TabDetailPager extends BaseMenuDetailPager implements ViewPager.OnP
 
     @Override
     public void initData() {
+        String cache = CacheUtils.getCache(mActivity, mUrl);
+        if(!TextUtils.isEmpty(cache)){
+            parseData(cache, false);
+        }
         getDataFromService();
     }
 
@@ -139,6 +150,8 @@ public class TabDetailPager extends BaseMenuDetailPager implements ViewPager.OnP
                 System.out.println("页签详情页返回结果:" + result);
 
                 parseData(result, false);
+
+                CacheUtils.setCache(mActivity, mUrl, result);
             }
 
             @Override
@@ -182,6 +195,24 @@ public class TabDetailPager extends BaseMenuDetailPager implements ViewPager.OnP
                 newsAdapter = new NewsAdapter();
                 listView.setAdapter(newsAdapter);
             }
+
+            if(mHandler == null){
+                mHandler = new Handler(){
+                    @Override
+                    public void handleMessage(Message msg) {
+                        int currentItem = viewPager.getCurrentItem();
+                        if(currentItem < topNewsDatas.size() -1){
+                            currentItem++;
+                        }else{
+                            currentItem = 0;
+                        }
+                        viewPager.setCurrentItem(currentItem);
+
+                        mHandler.sendEmptyMessageDelayed(0, 3000);
+                    }
+                };
+                mHandler.sendEmptyMessageDelayed(0, 3000);
+            }
         }else{
             ArrayList<TabData.TabNewsData> news = mTabDetailData.data.news;
             newsDatas.addAll(news);
@@ -206,10 +237,12 @@ public class TabDetailPager extends BaseMenuDetailPager implements ViewPager.OnP
     }
 
     class TopNewsAdapter extends PagerAdapter{
-        private BitmapUtils utils;
+//        private BitmapUtils utils;
+        private MyBitmapUtils utils;
         public TopNewsAdapter(){
-            utils = new BitmapUtils(mActivity);
-            utils.configDefaultLoadingImage(R.drawable.topnews_item_default);//设置默认图片
+//            utils = new BitmapUtils(mActivity);
+//            utils.configDefaultLoadingImage(R.drawable.topnews_item_default);//设置默认图片
+            utils = new MyBitmapUtils();
         }
 
         @Override
@@ -232,12 +265,41 @@ public class TabDetailPager extends BaseMenuDetailPager implements ViewPager.OnP
             utils.display(imageView, imgUrl.replace("10.0.2.2","192.168.0.104"));//传递imageView对象和图片地址
 
             container.addView(imageView);
+
+            imageView.setOnTouchListener(new TopNewsTouchListener());
+
             return imageView;
         }
 
         @Override
         public void destroyItem(ViewGroup container, int position, Object object) {
             container.removeView((View) object);
+        }
+    }
+
+    class TopNewsTouchListener implements View.OnTouchListener{
+
+        @Override
+        public boolean onTouch(View v, MotionEvent event) {
+            switch(event.getAction()){
+                case MotionEvent.ACTION_DOWN:
+                    mHandler.removeCallbacksAndMessages(null);// 删除Handler中的所有消息
+//                     mHandler.postDelayed(new Runnable() {
+//                         @Override
+//                         public void run() {
+//                         }
+//                     }, 3000);
+                    break;
+                case MotionEvent.ACTION_UP:
+                    mHandler.sendEmptyMessageDelayed(0, 3000);
+                    break;
+                case MotionEvent.ACTION_CANCEL:
+                    mHandler.sendEmptyMessageDelayed(0, 3000);//为了防止事件取消
+                    break;
+                default:
+                    break;
+            }
+            return false;
         }
     }
 

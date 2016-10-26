@@ -15,6 +15,8 @@ import com.wwq.utils.SPUtils;
 import com.wwq.wisdombeijing.MainActivity;
 import com.wwq.wisdombeijing.R;
 
+import cn.jpush.android.api.JPushInterface;
+
 /**
  * Created by 魏文强 on 2016/10/12.
  */
@@ -86,5 +88,17 @@ public class SplashActivity extends Activity {
             startActivity(new Intent(SplashActivity.this, MainActivity.class));
         }
         finish();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        JPushInterface.onResume(this);
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        JPushInterface.onPause(this);
     }
 }
