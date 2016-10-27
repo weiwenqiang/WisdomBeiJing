@@ -7,8 +7,18 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.Bundle;
+import android.util.Log;
+import android.view.View;
 import android.widget.Toast;
 
+import com.iflytek.cloud.InitListener;
+import com.iflytek.cloud.RecognizerListener;
+import com.iflytek.cloud.RecognizerResult;
+import com.iflytek.cloud.SpeechConstant;
+import com.iflytek.cloud.SpeechError;
+import com.iflytek.cloud.SpeechRecognizer;
+import com.iflytek.cloud.ui.RecognizerDialog;
+import com.iflytek.cloud.ui.RecognizerDialogListener;
 import com.jeremyfeinstein.slidingmenu.lib.SlidingMenu;
 import com.jeremyfeinstein.slidingmenu.lib.app.SlidingFragmentActivity;
 import com.wwq.fragment.ContentFragment;
@@ -18,6 +28,7 @@ import com.wwq.utils.ExampleUtil;
 public class MainActivity extends SlidingFragmentActivity {
     private static final String FRAGMENT_LEFT_MENU = "fragment_left_menu";
     private static final String FRAGMENT_CONTENT = "fragment_content";
+    private static final String TAG = "科大讯飞语音识别";
 
     public static boolean isForeground = false;
 
@@ -40,11 +51,10 @@ public class MainActivity extends SlidingFragmentActivity {
         int width = getWindowManager().getDefaultDisplay().getWidth();
 
 
-
         setBehindContentView(R.layout.activity_left_menu);// 设置侧边栏
         SlidingMenu slidingMenu = getSlidingMenu();// 获取侧边栏对象
         slidingMenu.setTouchModeAbove(SlidingMenu.TOUCHMODE_FULLSCREEN);// 设置全屏触摸
-        slidingMenu.setBehindOffset(width * 200 / 320 );// 设置预留屏幕的宽度
+        slidingMenu.setBehindOffset(width * 200 / 320);// 设置预留屏幕的宽度
 
         initFragment();
 
@@ -54,7 +64,7 @@ public class MainActivity extends SlidingFragmentActivity {
     /**
      * 初始化Fragment,填充布局文件
      */
-    private void initFragment(){
+    private void initFragment() {
         android.support.v4.app.FragmentManager fm = getSupportFragmentManager();
         android.support.v4.app.FragmentTransaction ft = fm.beginTransaction();//开启事务
         ft.replace(R.id.fl_left_menu, new LeftMenuFragment(), FRAGMENT_LEFT_MENU);
@@ -65,7 +75,7 @@ public class MainActivity extends SlidingFragmentActivity {
     }
 
     // 获取侧边栏fragment
-    public LeftMenuFragment getLeftMenuFragment(){
+    public LeftMenuFragment getLeftMenuFragment() {
         android.support.v4.app.FragmentManager fm = getSupportFragmentManager();
         LeftMenuFragment leftMenuFragment = (LeftMenuFragment) fm.findFragmentByTag(FRAGMENT_LEFT_MENU);
         return leftMenuFragment;
@@ -129,7 +139,7 @@ public class MainActivity extends SlidingFragmentActivity {
         }
     }
 
-    private void setCostomMsg(String msg){
+    private void setCostomMsg(String msg) {
 //        if (null != msgText) {
 //            msgText.setText(msg);
 //            msgText.setVisibility(android.view.View.VISIBLE);

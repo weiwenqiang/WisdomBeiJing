@@ -109,11 +109,13 @@ public class PhotoMenuDetailPager extends BaseMenuDetailPager {
 
 	class PhotoAdapter extends BaseAdapter {
 
-		private final MyBitmapUtils utils;
+//		private final MyBitmapUtils utils;
+		private final BitmapUtils utils;
 
 		public PhotoAdapter() {
-			utils = new MyBitmapUtils();
-//			utils.configDefaultLoadingImage(R.drawable.news_pic_default);
+//			utils = new MyBitmapUtils();
+			utils = new BitmapUtils(mActivity);
+			utils.configDefaultLoadingImage(R.drawable.news_pic_default);
 		}
 
 		@Override
